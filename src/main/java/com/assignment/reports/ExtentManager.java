@@ -5,7 +5,6 @@ import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.aventstack.extentreports.reporter.configuration.ChartLocation;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 import org.openqa.selenium.Platform;
-import org.testng.Reporter;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -41,16 +40,16 @@ public class ExtentManager {
 					platform = getPlatform();
 					String fileName = getReportFileLocation(platform);
 					ExtentHtmlReporter htmlReporter = new ExtentHtmlReporter(fileName + File.separator + "Report" + "-" + dateFormat.format(date) + ".html");
-					htmlReporter.config().setTestViewChartLocation(ChartLocation.BOTTOM);
+					htmlReporter.config().setTestViewChartLocation(ChartLocation.TOP);
 					htmlReporter.config().setChartVisibilityOnOpen(true);
-					htmlReporter.config().setTheme(Theme.STANDARD);
+					htmlReporter.config().setTheme(Theme.DARK);
 					htmlReporter.config().setDocumentTitle(fileName);
 					htmlReporter.config().setEncoding("utf-8");
 					htmlReporter.config().setReportName(fileName);
 
 					extent = new ExtentReports();
 					extent.attachReporter(htmlReporter);
-					Reporter.log("Extent Report directory: " + resultDirectory, true);
+					System.out.println("Extent Report directory: " + resultDirectory);
 				}
 			}
 		}

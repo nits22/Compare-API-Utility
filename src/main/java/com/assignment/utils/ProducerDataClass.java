@@ -40,7 +40,6 @@ public class ProducerDataClass {
 		File file1 = new File("src/main/resources/File3");
 		File file2 = new File("src/main/resources/File4");
 		int THREAD_COUNT = getThreads(file1,file2);
-		System.out.println(THREAD_COUNT);
 		kafkaConsumer.setExecutorService(new ThreadPoolExecutor(THREAD_COUNT, THREAD_COUNT, 0L,TimeUnit.MILLISECONDS,
 				new ArrayBlockingQueue<Runnable>(1000), new ThreadPoolExecutor.CallerRunsPolicy()));
 
