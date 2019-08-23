@@ -17,7 +17,7 @@ import java.util.Map.Entry;
 
 
 public class ApiUtility {
-	//GET METHOD EXECUTION
+	//GET Request
 	public ResponseEntity<String> getAPI(String baseuri){
 		try {
 
@@ -47,12 +47,11 @@ public class ApiUtility {
 
 
 
-	//POST METHOD EXECUTION
+	//POST Request
 	public ResponseEntity<String> postAPI(String baseuri, MultiValueMap<String, String> params , String header){
 
 		RestTemplate rt = new RestTemplate();
 		UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(baseuri)
-				// Add query parameter
 				.queryParams(params);
 		HttpHeaders httpHeaders = new HttpHeaders();
 
@@ -70,11 +69,10 @@ public class ApiUtility {
 		return res;
 	}
 
-	//PUT METHOD EXECUTION
+	//PUT Request
 	public ResponseEntity<String> putAPI(String baseuri,MultiValueMap<String, String> params ,String header){
 		RestTemplate rt = new RestTemplate();
 		UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(baseuri)
-				// Add query parameter
 				.queryParams(params);
 		HttpHeaders httpHeaders = new HttpHeaders();
 
@@ -92,10 +90,10 @@ public class ApiUtility {
 		return res;
 	}
 
+	//Delete request
 	public ResponseEntity<String> deleteAPI(String baseuri, MultiValueMap<String, String> params, String header){
 		RestTemplate rt = new RestTemplate();
 		UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(baseuri)
-				// Add query parameter
 				.queryParams(params);
 		HttpHeaders httpHeaders = new HttpHeaders();
 
@@ -114,11 +112,6 @@ public class ApiUtility {
 	}
 
 	public static void main(String[] args) throws URISyntaxException {
-
-		/*RestTemplate restTemplate = new RestTemplate();
-		URI uri = new URI("https://reqres.in/api/users/3");
-		String str = restTemplate.getForObject(uri, String.class);
-		System.out.println(str);*/
 
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
@@ -139,7 +132,6 @@ public class ApiUtility {
 		JsonElement o1 = parser.parse("{a : {a : 2}, b : 2}");
 		JsonElement o2 = parser.parse("{b : 2, a : {a : 2}}");
 		System.out.println(o1.equals(o2));
-
 
 	}
 }
