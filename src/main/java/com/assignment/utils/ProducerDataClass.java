@@ -1,20 +1,18 @@
 package com.assignment.utils;
 
+import com.assignment.listener.KafkaConsumer;
 import com.assignment.model.Requests;
+import com.assignment.reports.LoggerWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
-import org.springframework.util.concurrent.ListenableFuture;
-import org.springframework.util.concurrent.ListenableFutureCallback;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.util.concurrent.ExecutorService;
+import java.io.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -23,20 +21,42 @@ public class ProducerDataClass {
 	@Autowired
 	private KafkaTemplate<String, Requests> kafkaTemplate;
 
+	@Autowired
+	KafkaConsumer kafkaConsumer;
+
 	@Value("${request_topic}")
 	private String TOPIC;
 
+	private LoggerWrapper loggerWrapper = LoggerWrapper.getInstance();
+
 	@EventListener(ApplicationReadyEvent.class)
-	public void startapp () throws Exception {
-		Thread.sleep(10000);
+	public void startapp () {
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		File file1 = new File("src/main/resources/File3");
+		File file2 = new File("src/main/resources/File4");
+		int THREAD_COUNT = getThreads(file1,file2);
+		System.out.println(THREAD_COUNT);
+		kafkaConsumer.setExecutorService(new ThreadPoolExecutor(THREAD_COUNT, THREAD_COUNT, 0L,TimeUnit.MILLISECONDS,
+				new ArrayBlockingQueue<Runnable>(1000), new ThreadPoolExecutor.CallerRunsPolicy()));
+
+		BufferedReader br1 = null;
+		BufferedReader br2 = null;
+		try {
+			br1 = new BufferedReader(new FileReader(file1));
+			br2 = new BufferedReader(new FileReader(file2));
+		} catch (FileNotFoundException fnfe) {
+			loggerWrapper.myLogger.error("Incorrect File path " + fnfe.getStackTrace());
+			return;
+		}
 
 		try {
-			File file1 = new File("src/main/resources/File3");
-			File file2 = new File("src/main/resources/File4");
-
-			BufferedReader br1 = new BufferedReader(new FileReader(file1));
-			BufferedReader br2 = new BufferedReader(new FileReader(file2));
-			String line1 = br1.readLine();
+			String line1 = null;
+			line1 = br1.readLine();
 			String line2 = br2.readLine();
 			while(line1 != null && line2 != null){
 				Requests req = new Requests();
@@ -45,46 +65,39 @@ public class ProducerDataClass {
                 kafkaTemplate.send(TOPIC,req);
 				line1 = br1.readLine();
 				line2 = br2.readLine();
-
 			}
 			br1.close();
 			br2.close();
+		} catch (IOException ioe) {
+			loggerWrapper.myLogger.error("Error: " + ioe.getStackTrace());
 		}
-		catch(Exception e) {
-			System.out.println(e.getMessage());
+
+	}
+
+	public static int getThreads(File file1, File file2) {
+		long count;
+		int factor = 20000;
+		int MAX_SIZE = 100;
+		if(getFileSizeBytes(file1) > getFileSizeBytes(file2))
+			count = getFileSizeBytes(file1)/factor;
+		else
+			count = getFileSizeBytes(file2)/factor;
+		if(count < 1) {
+			return 20;
 		}
-		finally {
-			//awaitTerminationAfterShutdown(kafkaConsumer.getExecutorService());
+		else {
+			if((count * 10) > MAX_SIZE)
+				return 100;
+			else
+				return (int) (count * 10)+20;
 		}
 	}
 
-	public void awaitTerminationAfterShutdown(ExecutorService threadPool) {
-		threadPool.shutdown();
-		try {
-			if (!threadPool.awaitTermination(60, TimeUnit.SECONDS)) {
-				threadPool.shutdownNow();
-			}
-		} catch (InterruptedException ex) {
-			threadPool.shutdownNow();
-			Thread.currentThread().interrupt();
-		}
+	public static void main(String[] args) {
+		getThreads(new File("src/main/resources/File3"), new File("src/main/resources/File4"));
 	}
 
-	public void sendMessage(Requests message) {
-
-		ListenableFuture<SendResult<String, Requests>> future = kafkaTemplate.send(TOPIC, message);
-		future.addCallback(new ListenableFutureCallback<SendResult<String, Requests>>() {
-
-			@Override
-			public void onSuccess(SendResult<String, Requests> result) {
-				System.out.println("Sent message=[" + message +
-						"] with offset=[" + result.getRecordMetadata().offset() + "]");
-			}
-			@Override
-			public void onFailure(Throwable ex) {
-				System.out.println("Unable to send message=["
-						+ message + "] due to : " + ex.getMessage());
-			}
-		});
+	private static long getFileSizeBytes(File file) {
+		return (long) file.length();
 	}
 }

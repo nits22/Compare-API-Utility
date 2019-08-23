@@ -5,7 +5,6 @@ import com.assignment.utils.CompareUtility;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -15,13 +14,15 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class KafkaConsumer {
 
-
-    public ExecutorService getExecutorService() {
+    public ThreadPoolExecutor getExecutorService() {
         return executorService;
     }
 
-    private ThreadPoolExecutor executorService = new ThreadPoolExecutor(10, 10, 0L,TimeUnit.MILLISECONDS,
-            new ArrayBlockingQueue<Runnable>(1000), new ThreadPoolExecutor.CallerRunsPolicy());
+    public void setExecutorService(ThreadPoolExecutor executorService) {
+        this.executorService = executorService;
+    }
+
+    private ThreadPoolExecutor executorService = null;
 
     @KafkaListener(topics = "Kafka_Example", group = "group_id")
     public void consume(String message) {

@@ -88,6 +88,7 @@ public class CompareUtility implements Runnable{
 
     @Override
     public void run() {
+        System.out.println(Thread.currentThread().getName());
         final ApiUtility apiUtility= new ApiUtility();
         final CompareJSON compareJSON = new CompareJSON();
         final CompareXML compareXML = new CompareXML();
