@@ -68,14 +68,14 @@ public class CompareUtility implements Runnable{
         }
 
         if(content1==null || content2== null){
-            if(c.compare(res1.getBody(), res2.getBody()) == 0) {
+            if(c.compare(res1.getBody(), res2.getBody()) == true) {
                 System.out.println(request1 + " equals " + request2);
             }
             else
                 System.out.println(request1 +" not equals "+ request2 );
         }
         else if(content1.equals(content2) && content1.equals("application/json; charset=utf-8")) {
-            if(c.compare(res1.getBody(), res2.getBody()) == 0) {
+            if(c.compare(res1.getBody(), res2.getBody()) == true) {
                 System.out.println(request1 +" equals "+ request2 );
             }
             else
@@ -121,14 +121,14 @@ public class CompareUtility implements Runnable{
         }
 
         if(content1==null && content2== null){
-            if(c.compare(res1.getBody(), res2.getBody()) == 0) {
+            if(c.compare(res1.getBody(), res2.getBody()) == true) {
                 System.out.println(request1 + " equals " + request2);
             }
             else
                 System.out.println(request1 +" not equals "+ request2 );
         }
         else if(content1.equals(content2) && content1.equals("application/json; charset=utf-8")) {
-            if(c.compare(res1.getBody(), res2.getBody()) == 0) {
+            if(c.compare(res1.getBody(), res2.getBody()) == true) {
                 System.out.println(request1 +" equals "+ request2 );
             }
             else
