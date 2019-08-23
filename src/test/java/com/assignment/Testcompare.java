@@ -1,7 +1,7 @@
 package com.assignment;
 
 import com.assignment.reports.LoggerWrapper;
-import com.assignment.reports.Testlistener;
+import com.assignment.reports.ExtentListener;
 import com.assignment.utils.ApiUtility;
 import com.assignment.utils.CompareJSON;
 import com.assignment.utils.CompareUtility;
@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 
-@Listeners(Testlistener.class)
+@Listeners(ExtentListener.class)
 public class Testcompare {
 
 
@@ -70,7 +70,8 @@ public class Testcompare {
 
 	@Test(description = "Test run method of CompareUtility.class")
 	public void runMethodTest() {
-		CompareUtility compareUtility = new CompareUtility("https://reqres.in/api/users/3", "https://reqres.in/api/users/3");
+		String request1 = prop.getProperty("req1");
+		CompareUtility compareUtility = new CompareUtility(request1, request1);
 		ExecutorService service = Executors.newSingleThreadExecutor();
 		service.execute(compareUtility);
 
@@ -84,42 +85,51 @@ public class Testcompare {
 
 	@Test(description = "test for blank response with 301 status code")
 	public void checkResponsefor301() {
+		String request1 = prop.getProperty("req2");
+		String request2 = prop.getProperty("req3");
 		ApiUtility ap = new ApiUtility();
-		Assert.assertEquals(compareJSON.compare(ap.getAPI("http://reqres.in/api/users/3").getBody(), ap.getAPI("http://reqres.in/api/users/2").getBody()),true);
+		Assert.assertEquals(compareJSON.compare(ap.getAPI(request1).getBody(), ap.getAPI(request2).getBody()),true);
 	}
 
 
 	@Test(description = "Test for empty response with 4xx status code")
 	public void checkResponseWithEmptyBody() {
+		String request4 = prop.getProperty("req4");
 		ApiUtility ap = new ApiUtility();
-		Assert.assertEquals(compareJSON.compare(ap.getAPI("https://reqres.in/api/unknown/23").getBody(), ap.getAPI("https://reqres.in/api/unknown/23").getBody()),true);
+		Assert.assertEquals(compareJSON.compare(ap.getAPI(request4).getBody(), ap.getAPI(request4).getBody()),true);
 	}
 
 
 	@Test(description = "Test for same error response with same status code")
 	public void checkForSameErrorResponse() {
+		String request5 = prop.getProperty("req5");
+		String request6 = prop.getProperty("req6");
 		ApiUtility ap = new ApiUtility();
-		Assert.assertEquals(compareJSON.compare(ap.getAPI("http://www.mocky.io/v2/5d5e6d162f00005e0092f93d").getBody(), ap.getAPI("http://www.mocky.io/v2/5d5e79d22f00005e0092f9ed").getBody()),true);
+		Assert.assertEquals(compareJSON.compare(ap.getAPI(request5).getBody(), ap.getAPI(request6).getBody()),true);
 	}
 
 	@Test(description = "Test for same error response but different status code")
 	public void checkForSameErrorResponseDifferentStatusCode() {
+		String request5 = prop.getProperty("req5");
+		String request7 = prop.getProperty("req7");
 		ApiUtility ap = new ApiUtility();
-		Assert.assertEquals(compareJSON.compare(ap.getAPI("http://www.mocky.io/v2/5d5e6d162f00005e0092f93d").getBody(), ap.getAPI("http://www.mocky.io/v2/5d5e7be42f00004a0092f9ff").getBody()),true);
+		Assert.assertEquals(compareJSON.compare(ap.getAPI(request5).getBody(), ap.getAPI(request7).getBody()),true);
 	}
 
 
 	@Test(description = "Test response is returned for API with Large body")
 	public void checkRequestWithLargeBody() {
+		String request8 = prop.getProperty("req8");
 		ApiUtility ap = new ApiUtility();
-		Assert.assertEquals(ap.getAPI("http://dummy.restapiexample.com/api/v1/employees").getStatusCode(), HttpStatus.OK);
+		Assert.assertEquals(ap.getAPI(request8).getStatusCode(), HttpStatus.OK);
 	}
 
 
 	@Test(description = "Test for deplayed response timeout")
 	public void checkRequestWithDelayedResponse() {
+		String request9 = prop.getProperty("req9");
 		ApiUtility ap = new ApiUtility();
-		Assert.assertEquals(ap.getAPI("http://www.mocky.io/v2/5d5e6dbd2f00005c0092f955?mocky-delay=20s").getStatusCode(), HttpStatus.GATEWAY_TIMEOUT);
+		Assert.assertEquals(ap.getAPI(request9).getStatusCode(), HttpStatus.GATEWAY_TIMEOUT);
 	}
 
 	@Test(description = "Negative JSON comparison test cases")
@@ -127,6 +137,8 @@ public class Testcompare {
 		ApiUtility ap = new ApiUtility();
 		String response1 = prop.getProperty("res1");
 		String response3 = prop.getProperty("res3");
+		String request3 = prop.getProperty("req3");
+		String request4 = prop.getProperty("req4");
 
 		SoftAssert softAssert = new SoftAssert();
 		softAssert.assertEquals(compareJSON.compare(response1, response3),false);
@@ -135,28 +147,16 @@ public class Testcompare {
 		softAssert.assertEquals(compareJSON.compare(response1, "Test String"),false);
 
 		//check blank response is not equal Empty "{}" response
-		softAssert.assertEquals(compareJSON.compare(ap.getAPI("https://reqres.in/api/unknown/23").getBody(), ap.getAPI("http://reqres.in/api/users/2").getBody()),false);
+		softAssert.assertEquals(compareJSON.compare(ap.getAPI(request4).getBody(), ap.getAPI(request3).getBody()),false);
 		softAssert.assertAll();
 
 	}
 
-	// 400 - http://www.mocky.io/v2/5d5e6d162f00005e0092f93d
-	// 400 - http://www.mocky.io/v2/5d5e79d22f00005e0092f9ed
-	// 504 - http://www.mocky.io/v2/5d5e6dbd2f00005c0092f955?mocky-delay=20s
-	// 203 with error message - http://www.mocky.io/v2/5d5e7be42f00004a0092f9ff
-
-	// 200 - http://www.mocky.io/v2/5d5e732d2f00004a0092f9a1
-	// 203 with error message - http://www.mocky.io/v2/5d5e7d1f2f00005c0092fa11
-	// 400 - http://www.mocky.io/v2/5d5e7d322f00005f0092fa14
-	// 400 -  http://www.mocky.io/v2/5d5e7d572f00004e0092fa18
-	// 504 - http://www.mocky.io/v2/5d5e7ec92f00005c0092fa27?mocky-delay=20s
-
-	//200 - http://www.mocky.io/v2/5d5e84002f00004e0092fa5d
-	//200 - http://www.mocky.io/v2/5d5e84262f00004e0092fa62
-
 	@Test(description = "Test for when both requests returned plain/text response")
 	public void checkForPlainTextResponse(){
-		CompareUtility compareUtility = new CompareUtility("http://www.mocky.io/v2/5d5e84002f00004e0092fa5d", "http://www.mocky.io/v2/5d5e84262f00004e0092fa62");
+		String request10 = prop.getProperty("req10");
+		String request11 = prop.getProperty("req11");
+		CompareUtility compareUtility = new CompareUtility(request10, request11);
 		ExecutorService service = Executors.newSingleThreadExecutor();
 		service.execute(compareUtility);
 
@@ -194,17 +194,20 @@ public class Testcompare {
 
 	@Test(description = "Test same error response with same status code for XML response")
 	public void xmlCheckForSameErrorResponse() {
+		String request12 = prop.getProperty("req12");
+		String request13 = prop.getProperty("req13");
 		ApiUtility ap = new ApiUtility();
-		Assert.assertEquals(compareXML.compare(ap.getAPI("http://www.mocky.io/v2/5d5e7d322f00005f0092fa14").getBody(), ap.getAPI("http://www.mocky.io/v2/5d5e7d572f00004e0092fa18").getBody()),true);
+		Assert.assertEquals(compareXML.compare(ap.getAPI(request12).getBody(), ap.getAPI(request13).getBody()),true);
 	}
 
 
 	@Test(description = "Test same error response but different status code for XML response")
 	public void xmlCheckForSameErrorResponseDifferentStatusCode() {
+		String request14 = prop.getProperty("req14");
+		String request12 = prop.getProperty("req12");
 		ApiUtility ap = new ApiUtility();
-		Assert.assertEquals(compareXML.compare(ap.getAPI("http://www.mocky.io/v2/5d5e7d1f2f00005c0092fa11").getBody(), ap.getAPI("http://www.mocky.io/v2/5d5e7d322f00005f0092fa14").getBody()),true);
+		Assert.assertEquals(compareXML.compare(ap.getAPI(request14).getBody(), ap.getAPI(request12).getBody()),true);
 	}
-
 
 	@Test(description = "Text when response body is null for xml")
 	public void xmlCheckWhenResponseIsNull() {
@@ -213,6 +216,6 @@ public class Testcompare {
 
 	@AfterMethod
 	public void close() {
-		Testlistener.extent.flush();
+		ExtentListener.extent.flush();
 	}
 }

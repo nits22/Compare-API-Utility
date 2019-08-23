@@ -33,7 +33,7 @@ public class LoggerWrapper {
 		methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
 		lineNumber = Thread.currentThread().getStackTrace()[2].getLineNumber();
 		instance.myLogger.debug(className + "." + methodName + " " + lineNumber + " - " + logMessage);
-		Testlistener.CURRENT_TEST.get().log(Status.PASS, className + "." + methodName + " " + lineNumber + " - " + logMessage);
+		ExtentListener.CURRENT_TEST.get().log(Status.PASS, className + "." + methodName + " " + lineNumber + " - " + logMessage);
 	}
 
 	public void fail(String logMessage) {
@@ -41,7 +41,7 @@ public class LoggerWrapper {
 		methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
 		lineNumber = Thread.currentThread().getStackTrace()[2].getLineNumber();
 		instance.myLogger.debug(className + "." + methodName + " " + lineNumber + " - " + logMessage);
-		Testlistener.CURRENT_TEST.get().log(Status.FAIL, className + "." + methodName + "." + lineNumber + " - " + logMessage);
+		ExtentListener.CURRENT_TEST.get().log(Status.FAIL, className + "." + methodName + "." + lineNumber + " - " + logMessage);
 	}
 
 	public void info(String logMessage) {
@@ -49,7 +49,7 @@ public class LoggerWrapper {
 		methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
 		lineNumber = Thread.currentThread().getStackTrace()[2].getLineNumber();
 		instance.myLogger.info(className + "." + methodName + " " + lineNumber + " - " + logMessage);
-		Testlistener.CURRENT_TEST.get().log(Status.INFO, className + "." + methodName + "." + lineNumber + " - " + logMessage);
+		ExtentListener.CURRENT_TEST.get().log(Status.INFO, className + "." + methodName + "." + lineNumber + " - " + logMessage);
 		
 	}
 
@@ -68,7 +68,7 @@ public class LoggerWrapper {
 		methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
 		lineNumber = Thread.currentThread().getStackTrace()[2].getLineNumber();
 		instance.myLogger.error(className + "." + methodName + " " + lineNumber + " - " + logMessage + " | " + getStackTrace(e.fillInStackTrace()));
-		Testlistener.CURRENT_TEST.get().log(Status.FAIL, className + "." + methodName + "." + lineNumber + " - " + logMessage + " | " + getStackTrace(e.fillInStackTrace()));
+		ExtentListener.CURRENT_TEST.get().log(Status.FAIL, className + "." + methodName + "." + lineNumber + " - " + logMessage + " | " + getStackTrace(e.fillInStackTrace()));
 	}
 
 	// prevent cloning

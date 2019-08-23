@@ -9,7 +9,7 @@ import org.testng.ITestResult;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-public class Testlistener extends ExtentManager implements ITestListener {
+public class ExtentListener extends ExtentManager implements ITestListener {
 
 	//Extent Report Declarations
 	public static ExtentReports extent = ExtentManager.getInstance();
