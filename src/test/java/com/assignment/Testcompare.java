@@ -45,8 +45,9 @@ public class Testcompare {
 
 	}
 
-	@Test(description = "All Positive comparisons cases of JSON")
+	@Test(description = "All Positive Comparisons cases of JSON")
 	public void checkJsonPositive() {
+		ExtentListener.CURRENT_TEST.get().assignCategory("JSON Response Comparison");
 		String response4 = prop.getProperty("res4");
 		String response2 = prop.getProperty("res2");
 		String response1 = prop.getProperty("res1");
@@ -70,6 +71,7 @@ public class Testcompare {
 
 	@Test(description = "Test run method of CompareUtility.class")
 	public void runMethodTest() {
+		ExtentListener.CURRENT_TEST.get().assignCategory("JSON Response Comparison");
 		String request1 = prop.getProperty("req1");
 		CompareUtility compareUtility = new CompareUtility(request1, request1);
 		ExecutorService service = Executors.newSingleThreadExecutor();
@@ -94,6 +96,7 @@ public class Testcompare {
 
 	@Test(description = "Test for empty response with 4xx status code")
 	public void checkResponseWithEmptyBody() {
+		ExtentListener.CURRENT_TEST.get().assignCategory("JSON Response Comparison");
 		String request4 = prop.getProperty("req4");
 		ApiUtility ap = new ApiUtility();
 		Assert.assertEquals(compareJSON.compare(ap.getAPI(request4).getBody(), ap.getAPI(request4).getBody()),true);
@@ -102,6 +105,7 @@ public class Testcompare {
 
 	@Test(description = "Test for same error response with same status code")
 	public void checkForSameErrorResponse() {
+		ExtentListener.CURRENT_TEST.get().assignCategory("JSON Response Comparison");
 		String request5 = prop.getProperty("req5");
 		String request6 = prop.getProperty("req6");
 		ApiUtility ap = new ApiUtility();
@@ -110,6 +114,7 @@ public class Testcompare {
 
 	@Test(description = "Test for same error response but different status code")
 	public void checkForSameErrorResponseDifferentStatusCode() {
+		ExtentListener.CURRENT_TEST.get().assignCategory("JSON Response Comparison");
 		String request5 = prop.getProperty("req5");
 		String request7 = prop.getProperty("req7");
 		ApiUtility ap = new ApiUtility();
@@ -119,6 +124,7 @@ public class Testcompare {
 
 	@Test(description = "Test response is returned for API with Large body")
 	public void checkRequestWithLargeBody() {
+		ExtentListener.CURRENT_TEST.get().assignCategory("JSON Response Comparison");
 		String request8 = prop.getProperty("req8");
 		ApiUtility ap = new ApiUtility();
 		Assert.assertEquals(ap.getAPI(request8).getStatusCode(), HttpStatus.OK);
@@ -127,13 +133,15 @@ public class Testcompare {
 
 	@Test(description = "Test for deplayed response timeout")
 	public void checkRequestWithDelayedResponse() {
+		ExtentListener.CURRENT_TEST.get().assignCategory("JSON Response Comparison");
 		String request9 = prop.getProperty("req9");
 		ApiUtility ap = new ApiUtility();
 		Assert.assertEquals(ap.getAPI(request9).getStatusCode(), HttpStatus.GATEWAY_TIMEOUT);
 	}
 
-	@Test(description = "Negative JSON comparison test cases")
+	@Test(description = "Negative JSON Comparison test cases")
 	public void negativeJsonTest() {
+		ExtentListener.CURRENT_TEST.get().assignCategory("JSON Response Comparison");
 		ApiUtility ap = new ApiUtility();
 		String response1 = prop.getProperty("res1");
 		String response3 = prop.getProperty("res3");
@@ -170,6 +178,7 @@ public class Testcompare {
 
 	@Test(description = "Positive compareXML test cases")
 	public void xmlTest() {
+		ExtentListener.CURRENT_TEST.get().assignCategory("XML Response Comparison");
 		String xml1 = prop.getProperty("xml1");
 		String xml2 = prop.getProperty("xml2");
 		String xml3 = prop.getProperty("xml3");
@@ -194,6 +203,7 @@ public class Testcompare {
 
 	@Test(description = "Test same error response with same status code for XML response")
 	public void xmlCheckForSameErrorResponse() {
+		ExtentListener.CURRENT_TEST.get().assignCategory("XML Response Comparison");
 		String request12 = prop.getProperty("req12");
 		String request13 = prop.getProperty("req13");
 		ApiUtility ap = new ApiUtility();
@@ -203,6 +213,7 @@ public class Testcompare {
 
 	@Test(description = "Test same error response but different status code for XML response")
 	public void xmlCheckForSameErrorResponseDifferentStatusCode() {
+		ExtentListener.CURRENT_TEST.get().assignCategory("XML Response Comparison");
 		String request14 = prop.getProperty("req14");
 		String request12 = prop.getProperty("req12");
 		ApiUtility ap = new ApiUtility();
@@ -211,6 +222,7 @@ public class Testcompare {
 
 	@Test(description = "Text when response body is null for xml")
 	public void xmlCheckWhenResponseIsNull() {
+		ExtentListener.CURRENT_TEST.get().assignCategory("XML Response Comparison");
 		Assert.assertEquals(compareXML.compare(null, null),true);
 	}
 
