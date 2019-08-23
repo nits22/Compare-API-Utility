@@ -1,6 +1,7 @@
 /target/
 !.mvn/wrapper/maven-wrapper.jar
-
+*html
+*.log
 ### STS ###
 .apt_generated
 .classpath
@@ -23,3 +24,11 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+# Directories #
+/build/
+/bin/
+/target/
+/Execution/
+*/target/*
+/target/**
