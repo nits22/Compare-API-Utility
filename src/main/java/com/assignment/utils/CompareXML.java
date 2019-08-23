@@ -1,18 +1,19 @@
 package com.assignment.utils;
 
+import com.assignment.reports.LoggerWrapper;
 import org.custommonkey.xmlunit.DetailedDiff;
-import org.xmlunit.diff.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.xml.sax.SAXException;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.diff.DefaultNodeMatcher;
+import org.xmlunit.diff.Diff;
 import org.xmlunit.diff.ElementSelectors;
 
 import java.io.IOException;
 import java.util.List;
 
 public class CompareXML {
-
+	private LoggerWrapper loggerWrapper = LoggerWrapper.getInstance();
 	public boolean compare(String xml1,String xml2) {
 
 		if(xml1 == null && xml2 == null)
@@ -28,6 +29,7 @@ public class CompareXML {
 					.build();
 		}
 		catch (Exception e) {
+			loggerWrapper.myLogger.info(loggerWrapper.getStackTrace(e.fillInStackTrace()));
 			return false;
 		}
 		return !diff.hasDifferences();
@@ -49,7 +51,7 @@ public class CompareXML {
 		//assertXMLEquals(expected, result);
 	}
 
-	public static boolean assertXMLEquals(String expectedXML, String actualXML)  {
+	public boolean assertXMLEquals(String expectedXML, String actualXML)  {
 		XMLUnit.setIgnoreWhitespace(true);
 		XMLUnit.setIgnoreAttributeOrder(true);
 
@@ -57,9 +59,9 @@ public class CompareXML {
 		try {
 			diff = new DetailedDiff(XMLUnit.compareXML(expectedXML, actualXML));
 		} catch (SAXException e) {
-			e.printStackTrace();
+			loggerWrapper.myLogger.info(loggerWrapper.getStackTrace(e.fillInStackTrace()));
 		} catch (IOException e) {
-			e.printStackTrace();
+			loggerWrapper.myLogger.info(loggerWrapper.getStackTrace(e.fillInStackTrace()));
 		}
 
 		List<?> allDifferences = diff.getAllDifferences();

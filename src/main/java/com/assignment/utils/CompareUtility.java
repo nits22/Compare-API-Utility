@@ -19,10 +19,10 @@ public class CompareUtility implements Runnable{
     }
 
     public void compareRequests(String request1, String request2){
-        final ApiUtility ae= new ApiUtility();
-        final CompareJSON c = new CompareJSON();
-        final CompareXML xc = new CompareXML();
-        ResponseEntity<String> res1 =ae.getAPI(request1);
+        final ApiUtility apiUtility= new ApiUtility();
+        final CompareJSON compareJSON = new CompareJSON();
+        final CompareXML compareXML = new CompareXML();
+        ResponseEntity<String> res1 =apiUtility.getAPI(request1);
         String content1 = null;
         try {
             Set<Map.Entry<String, List<String>>> headers1 = res1.getHeaders().entrySet();
@@ -35,7 +35,7 @@ public class CompareUtility implements Runnable{
         catch (NullPointerException npe){
         }
         String content2 = null;
-        ResponseEntity<String> res2 =ae.getAPI(request2);
+        ResponseEntity<String> res2 =apiUtility.getAPI(request2);
 
         try{
             Set<Map.Entry<String, List<String>>> headers2 = res2.getHeaders().entrySet();
@@ -57,21 +57,21 @@ public class CompareUtility implements Runnable{
             return;
         }
         if(content1==null || content2== null){
-            if(c.compare(res1.getBody(), res2.getBody()) == true) {
+            if(compareJSON.compare(res1.getBody(), res2.getBody()) == true) {
                 loggerWrapper.onlyLogsInfo(request1 + " equals " + request2);
             }
             else
                 loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
         }
         else if(content1.equals(content2) && content1.equals("application/json; charset=utf-8")) {
-            if(c.compare(res1.getBody(), res2.getBody()) == true) {
+            if(compareJSON.compare(res1.getBody(), res2.getBody()) == true) {
                 loggerWrapper.onlyLogsInfo(request1 +" equals "+ request2 );
             }
             else
                 loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
         }
         else if(content1.equals(content2) && content1.equals("application/xml; charset=utf-8")) {
-            if(xc.compare(res1.getBody(), res2.getBody())==true) {
+            if(compareXML.compare(res1.getBody(), res2.getBody())==true) {
                 loggerWrapper.onlyLogsInfo(request1 +" equals "+ request1 );
             }
             else
@@ -88,10 +88,10 @@ public class CompareUtility implements Runnable{
 
     @Override
     public void run() {
-        final ApiUtility ae= new ApiUtility();
-        final CompareJSON c = new CompareJSON();
-        final CompareXML xc = new CompareXML();
-        ResponseEntity<String> res1 =ae.getAPI(request1);
+        final ApiUtility apiUtility= new ApiUtility();
+        final CompareJSON compareJSON = new CompareJSON();
+        final CompareXML compareXML = new CompareXML();
+        ResponseEntity<String> res1 =apiUtility.getAPI(request1);
         String content1 = null;
         try {
             Set<Map.Entry<String, List<String>>> headers1 = res1.getHeaders().entrySet();
@@ -104,7 +104,7 @@ public class CompareUtility implements Runnable{
         catch (NullPointerException npe){
         }
         String content2 = null;
-        ResponseEntity<String> res2 =ae.getAPI(request2);
+        ResponseEntity<String> res2 =apiUtility.getAPI(request2);
 
         try{
             Set<Map.Entry<String, List<String>>> headers2 = res2.getHeaders().entrySet();
@@ -126,21 +126,21 @@ public class CompareUtility implements Runnable{
             return;
         }
         if(content1==null || content2== null){
-            if(c.compare(res1.getBody(), res2.getBody()) == true) {
+            if(compareJSON.compare(res1.getBody(), res2.getBody()) == true) {
                 loggerWrapper.onlyLogsInfo(request1 + " equals " + request2);
             }
             else
                 loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
         }
         else if(content1.equals(content2) && content1.equals("application/json; charset=utf-8")) {
-            if(c.compare(res1.getBody(), res2.getBody()) == true) {
+            if(compareJSON.compare(res1.getBody(), res2.getBody()) == true) {
                 loggerWrapper.onlyLogsInfo(request1 +" equals "+ request2 );
             }
             else
                 loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
         }
         else if(content1.equals(content2) && content1.equals("application/xml; charset=utf-8")) {
-            if(xc.compare(res1.getBody(), res2.getBody())==true) {
+            if(compareXML.compare(res1.getBody(), res2.getBody())==true) {
                 loggerWrapper.onlyLogsInfo(request1 +" equals "+ request1 );
             }
             else
@@ -158,7 +158,7 @@ public class CompareUtility implements Runnable{
 
     public static void main(String[] args) {
         CompareUtility compareUtility = new CompareUtility("http://reqres.in/api/users/3","http://reqres.in/api/users/3");
-        compareUtility.compareRequests("https://reqres.in/ref3d3/344/342", "https://reqres.in/ref3d3/344/342");
+        compareUtility.compareRequests("http://www.mocky.io/v2/5d5e6d162f00005e0092f93d", "http://www.mocky.io/v2/5d5e79d22f00005e0092f9ed");
 
     }
 }

@@ -38,7 +38,7 @@ public class ExtentManager {
 					 * File resultDirectory = new
 					 * File(outputDirectory.getParentFile(),"ExtentReports");
 					 */
-					platform = getCurrentPlatform();
+					platform = getPlatform();
 					String fileName = getReportFileLocation(platform);
 					ExtentHtmlReporter htmlReporter = new ExtentHtmlReporter(fileName + File.separator + "Report" + "-" + dateFormat.format(date) + ".html");
 					htmlReporter.config().setTestViewChartLocation(ChartLocation.BOTTOM);
@@ -59,8 +59,7 @@ public class ExtentManager {
 	}
 
 
-	//Get current platform
-	private static Platform getCurrentPlatform () {
+	private static Platform getPlatform () {
 		if (platform == null) {
 			String operSys = System.getProperty("os.name").toLowerCase();
 			if (operSys.contains("win")) {
@@ -75,7 +74,6 @@ public class ExtentManager {
 		return platform;
 	}
 
-	//Create the report path if it does not exist
 	private static void createReportPath (String path) {
 		File testDirectory = new File(path);
 		if (!testDirectory.exists()) {
@@ -89,7 +87,6 @@ public class ExtentManager {
 		}
 	}
 
-	//Select the extent report file location based on platform
 	private static String getReportFileLocation (Platform platform) {
 		String reportFileLocation = null;
 		switch (platform) {
@@ -104,7 +101,7 @@ public class ExtentManager {
 			loggerWrapper.onlyLogsInfo("ExtentReport Path for WINDOWS: " + windowsPath + "\n");
 			break;
 		default:
-			loggerWrapper.onlyLogsInfo("ExtentReport path has not been set! There is a problem!\n");
+			loggerWrapper.onlyLogsInfo("ExtentReport path has not been set");
 			break;
 		}
 		return reportFileLocation;
