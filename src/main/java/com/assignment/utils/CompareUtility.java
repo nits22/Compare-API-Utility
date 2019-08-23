@@ -8,34 +8,6 @@ import java.util.Set;
 
 
 public class CompareUtility implements Runnable{
-//	private  final ThreadLocal<ApiUtility> apiExecute =
-//			new ThreadLocal<ApiUtility>()
-//			{
-//				@Override
-//				protected ApiUtility  initialValue()
-//				{
-//					return new ApiUtility();
-//				}
-//			};
-//
-//	private  final ThreadLocal<CompareJSON> compareJSON =
-//			new ThreadLocal<CompareJSON>()
-//			{
-//				@Override
-//				protected CompareJSON  initialValue()
-//				{
-//					return new CompareJSON();
-//				}
-//			};
-//	private  final ThreadLocal<CompareXML> compareXML =
-//			new ThreadLocal<CompareXML>()
-//			{
-//				@Override
-//				protected CompareXML  initialValue()
-//				{
-//					return new CompareXML();
-//				}
-//			};
 
     private String request1;
     private String request2;
@@ -51,22 +23,38 @@ public class CompareUtility implements Runnable{
         final CompareXML xc = new CompareXML();
         ResponseEntity<String> res1 =ae.getAPI(request1);
         String content1 = null;
-        Set<Map.Entry<String, List<String>>> headers1 = res1.getHeaders().entrySet();
+        try {
+            Set<Map.Entry<String, List<String>>> headers1 = res1.getHeaders().entrySet();
 
-        for (Map.Entry<String, List<String>> header : headers1) {
-            if(header.getKey().equals("Content-Type"))
-                content1 = header.getValue().get(0);
+            for (Map.Entry<String, List<String>> header : headers1) {
+                if (header.getKey().equals("Content-Type"))
+                    content1 = header.getValue().get(0);
+            }
+        }
+        catch (NullPointerException npe){
         }
         String content2 = null;
         ResponseEntity<String> res2 =ae.getAPI(request2);
 
-        Set<Map.Entry<String, List<String>>> headers2 = res2.getHeaders().entrySet();
+        try{
+            Set<Map.Entry<String, List<String>>> headers2 = res2.getHeaders().entrySet();
 
-        for (Map.Entry<String, List<String>> header : headers2) {
-            if(header.getKey().equals("Content-Type"))
-                content2 = header.getValue().get(0);
+            for (Map.Entry<String, List<String>> header : headers2) {
+                if(header.getKey().equals("Content-Type"))
+                    content2 = header.getValue().get(0);
+            }
+        }
+        catch (NullPointerException npe){
         }
 
+        if((res1 == null && res2 != null) || (res1 !=null && res2 == null) || (res1 == null && res2 == null)){
+            System.out.println(request1 +" not equals "+ request2 );
+            return;
+        }
+        if(res1.getStatusCode() != res2.getStatusCode()){
+            System.out.println(request1 +" not equals "+ request2 );
+            return;
+        }
         if(content1==null || content2== null){
             if(c.compare(res1.getBody(), res2.getBody()) == true) {
                 System.out.println(request1 + " equals " + request2);
@@ -104,23 +92,39 @@ public class CompareUtility implements Runnable{
         final CompareXML xc = new CompareXML();
         ResponseEntity<String> res1 =ae.getAPI(request1);
         String content1 = null;
-        Set<Map.Entry<String, List<String>>> headers1 = res1.getHeaders().entrySet();
+        try {
+            Set<Map.Entry<String, List<String>>> headers1 = res1.getHeaders().entrySet();
 
-        for (Map.Entry<String, List<String>> header : headers1) {
-            if(header.getKey().equals("Content-Type"))
-                content1 = header.getValue().get(0);
+            for (Map.Entry<String, List<String>> header : headers1) {
+                if (header.getKey().equals("Content-Type"))
+                    content1 = header.getValue().get(0);
+            }
+        }
+        catch (NullPointerException npe){
         }
         String content2 = null;
         ResponseEntity<String> res2 =ae.getAPI(request2);
 
-        Set<Map.Entry<String, List<String>>> headers2 = res2.getHeaders().entrySet();
+        try{
+            Set<Map.Entry<String, List<String>>> headers2 = res2.getHeaders().entrySet();
 
-        for (Map.Entry<String, List<String>> header : headers2) {
-            if(header.getKey().equals("Content-Type"))
-                content2 = header.getValue().get(0);
+            for (Map.Entry<String, List<String>> header : headers2) {
+                if(header.getKey().equals("Content-Type"))
+                    content2 = header.getValue().get(0);
+            }
+        }
+        catch (NullPointerException npe){
         }
 
-        if(content1==null && content2== null){
+        if((res1 == null && res2 != null) || (res1 !=null && res2 == null) || (res1 == null && res2 == null)){
+            System.out.println(request1 +" not equals "+ request2 );
+            return;
+        }
+        if(res1.getStatusCode() != res2.getStatusCode()){
+            System.out.println(request1 +" not equals "+ request2 );
+            return;
+        }
+        if(content1==null || content2== null){
             if(c.compare(res1.getBody(), res2.getBody()) == true) {
                 System.out.println(request1 + " equals " + request2);
             }
@@ -142,7 +146,7 @@ public class CompareUtility implements Runnable{
                 System.out.println(request1 +" not equals "+ request2 );
         }
         else {
-            if(res1.equals(res2))
+            if(res1.getBody().equals(res2.getBody()))
                 System.out.println(request1 +" equals "+ request1 );
             else
                 System.out.println(request1 + " not equals " + request2);
@@ -153,8 +157,7 @@ public class CompareUtility implements Runnable{
 
     public static void main(String[] args) {
         CompareUtility compareUtility = new CompareUtility("http://reqres.in/api/users/3","http://reqres.in/api/users/3");
-        compareUtility.compareRequests("https://reqres.in/api/users/3", "http://reqres.in/api/users/3");
+        compareUtility.compareRequests("https://reqres.in/ref3d3/344/342", "https://reqres.in/ref3d3/344/342");
 
     }
-
 }
