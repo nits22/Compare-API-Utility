@@ -1,5 +1,6 @@
 package com.assignment.utils;
 
+import com.assignment.reports.LoggerWrapper;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.Set;
 
 
 public class CompareUtility implements Runnable{
-
+    private LoggerWrapper loggerWrapper = LoggerWrapper.getInstance();
     private String request1;
     private String request2;
 
@@ -48,39 +49,39 @@ public class CompareUtility implements Runnable{
         }
 
         if((res1 == null && res2 != null) || (res1 !=null && res2 == null) || (res1 == null && res2 == null)){
-            System.out.println(request1 +" not equals "+ request2 );
+            loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
             return;
         }
         if(res1.getStatusCode() != res2.getStatusCode()){
-            System.out.println(request1 +" not equals "+ request2 );
+            loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
             return;
         }
         if(content1==null || content2== null){
             if(c.compare(res1.getBody(), res2.getBody()) == true) {
-                System.out.println(request1 + " equals " + request2);
+                loggerWrapper.onlyLogsInfo(request1 + " equals " + request2);
             }
             else
-                System.out.println(request1 +" not equals "+ request2 );
+                loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
         }
         else if(content1.equals(content2) && content1.equals("application/json; charset=utf-8")) {
             if(c.compare(res1.getBody(), res2.getBody()) == true) {
-                System.out.println(request1 +" equals "+ request2 );
+                loggerWrapper.onlyLogsInfo(request1 +" equals "+ request2 );
             }
             else
-                System.out.println(request1 +" not equals "+ request2 );
+                loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
         }
         else if(content1.equals(content2) && content1.equals("application/xml; charset=utf-8")) {
             if(xc.compare(res1.getBody(), res2.getBody())==true) {
-                System.out.println(request1 +" equals "+ request1 );
+                loggerWrapper.onlyLogsInfo(request1 +" equals "+ request1 );
             }
             else
-                System.out.println(request1 +" not equals "+ request2 );
+                loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
         }
         else {
             if(res1.getBody().equals(res2.getBody()))
-                System.out.println(request1 +" equals "+ request1 );
+                loggerWrapper.onlyLogsInfo(request1 +" equals "+ request1 );
             else
-                System.out.println(request1 + " not equals " + request2);
+                loggerWrapper.onlyLogsInfo(request1 + " not equals " + request2);
         }
         System.gc();
     }
@@ -117,39 +118,39 @@ public class CompareUtility implements Runnable{
         }
 
         if((res1 == null && res2 != null) || (res1 !=null && res2 == null) || (res1 == null && res2 == null)){
-            System.out.println(request1 +" not equals "+ request2 );
+            loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
             return;
         }
         if(res1.getStatusCode() != res2.getStatusCode()){
-            System.out.println(request1 +" not equals "+ request2 );
+            loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
             return;
         }
         if(content1==null || content2== null){
             if(c.compare(res1.getBody(), res2.getBody()) == true) {
-                System.out.println(request1 + " equals " + request2);
+                loggerWrapper.onlyLogsInfo(request1 + " equals " + request2);
             }
             else
-                System.out.println(request1 +" not equals "+ request2 );
+                loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
         }
         else if(content1.equals(content2) && content1.equals("application/json; charset=utf-8")) {
             if(c.compare(res1.getBody(), res2.getBody()) == true) {
-                System.out.println(request1 +" equals "+ request2 );
+                loggerWrapper.onlyLogsInfo(request1 +" equals "+ request2 );
             }
             else
-                System.out.println(request1 +" not equals "+ request2 );
+                loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
         }
         else if(content1.equals(content2) && content1.equals("application/xml; charset=utf-8")) {
             if(xc.compare(res1.getBody(), res2.getBody())==true) {
-                System.out.println(request1 +" equals "+ request1 );
+                loggerWrapper.onlyLogsInfo(request1 +" equals "+ request1 );
             }
             else
-                System.out.println(request1 +" not equals "+ request2 );
+                loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
         }
         else {
             if(res1.getBody().equals(res2.getBody()))
-                System.out.println(request1 +" equals "+ request1 );
+                loggerWrapper.onlyLogsInfo(request1 +" equals "+ request1 );
             else
-                System.out.println(request1 + " not equals " + request2);
+                loggerWrapper.onlyLogsInfo(request1 + " not equals " + request2);
         }
         System.gc();
     }
