@@ -2,12 +2,10 @@ package com.assignment.utils;
 
 public class CompareJSON {
 	public int compare(String res1, String res2) {
-			int status = 2;
-
+			int status = -1;
 			try {
 				if(res1.equals(res2))
 					status= 0;
-
 				else
 					status= -1;
 			}
