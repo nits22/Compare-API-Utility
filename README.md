@@ -56,7 +56,9 @@ factor 1 --partitions 1 --topic Kafka_json
 # Running Application
 Go to compare-api-utility directory and run below command:
 
-mvn clean spring-boot:run
+**mvn clean spring-boot:run**
+
+Flow starts from *ProducerDataClass* listening to *ApplicationReadyEvent*
 
 # Running Tests
 
