@@ -48,11 +48,11 @@ public class CompareUtility implements Runnable{
         catch (NullPointerException npe){
         }
 
-        if((res1 == null && res2 != null) || (res1 !=null && res2 == null) || (res1 == null && res2 == null)){
-            loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
+        if((res1 == null && res2 == null)){
+            loggerWrapper.onlyLogsInfo(request1 +" equals "+ request2 );
             return;
         }
-        if(res1.getStatusCode() != res2.getStatusCode()){
+        if((res1 == null && res2 != null) || (res1 !=null && res2 == null)){
             loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
             return;
         }
@@ -117,11 +117,11 @@ public class CompareUtility implements Runnable{
         catch (NullPointerException npe){
         }
 
-        if((res1 == null && res2 != null) || (res1 !=null && res2 == null) || (res1 == null && res2 == null)){
-            loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
+        if((res1 == null && res2 == null)){
+            loggerWrapper.onlyLogsInfo(request1 +" equals "+ request2 );
             return;
         }
-        if(res1.getStatusCode() != res2.getStatusCode()){
+        if((res1 == null && res2 != null) || (res1 !=null && res2 == null)){
             loggerWrapper.onlyLogsInfo(request1 +" not equals "+ request2 );
             return;
         }
@@ -158,7 +158,7 @@ public class CompareUtility implements Runnable{
 
     public static void main(String[] args) {
         CompareUtility compareUtility = new CompareUtility("http://reqres.in/api/users/3","http://reqres.in/api/users/3");
-        compareUtility.compareRequests("http://www.mocky.io/v2/5d5e6d162f00005e0092f93d", "http://www.mocky.io/v2/5d5e79d22f00005e0092f9ed");
+        //compareUtility.compareRequests("http://www.mocky.io/v2/5d5e6d162f00005e0092f93d", "http://www.mocky.io/v2/5d5e6d162f00005e0092f93d");
 
     }
 }

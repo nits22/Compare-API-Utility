@@ -40,7 +40,7 @@ public class ProducerDataClass {
 		File file1 = new File("src/main/resources/File3");
 		File file2 = new File("src/main/resources/File4");
 		int THREAD_COUNT = getThreads(file1,file2);
-		kafkaConsumer.setExecutorService(new ThreadPoolExecutor(THREAD_COUNT, THREAD_COUNT, 0L,TimeUnit.MILLISECONDS,
+		kafkaConsumer.setExecutorService(new ThreadPoolExecutor(THREAD_COUNT/10, THREAD_COUNT, 0L,TimeUnit.MILLISECONDS,
 				new ArrayBlockingQueue<Runnable>(1000), new ThreadPoolExecutor.CallerRunsPolicy()));
 
 		BufferedReader br1 = null;
@@ -85,15 +85,12 @@ public class ProducerDataClass {
 			return 20;
 		}
 		else {
-			if((count * 10) > MAX_SIZE)
-				return 100;
-			else
-				return (int) (count * 10)+20;
+			return (count * 10 > MAX_SIZE) ? MAX_SIZE : (int) (count * 10)+20;
 		}
 	}
 
 	public static void main(String[] args) {
-		getThreads(new File("src/main/resources/File3"), new File("src/main/resources/File4"));
+		System.out.println(getThreads(new File("src/main/resources/File3"), new File("src/main/resources/File4")));
 	}
 
 	private static long getFileSizeBytes(File file) {
